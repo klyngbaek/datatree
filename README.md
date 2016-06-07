@@ -1,6 +1,6 @@
 # datatree
 
-```
+```javascript
 # require datatree module
 var DataTree = require('datatreee');
 
