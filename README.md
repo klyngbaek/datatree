@@ -1,16 +1,16 @@
 # datatree
 
 ```javascript
-# require datatree module
+// require datatree module
 var DataTree = require('datatreee');
 
-# static methods
+// static methods
 DataTree.concat()
 
-# create DataTree instance
+// create DataTree instance
 var dataTree = function DataTree(inputJS)
 
-# instance methods
+// instance methods
 dataTree.getData()
 dataTree.getDataIn(keys)
 dataTree.setData(data)
