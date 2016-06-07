@@ -1,7 +1,7 @@
 {
-  "name": "data-tree",
+  "name": "datatree",
   "version": "1.0.0",
-  "description": "",
+  "description": "function DataTree(inputJS)",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*",
@@ -12,5 +12,25 @@
   "devDependencies": {
     "tape": "^4.5.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/klyngbaek/datatree.git"
+  },
+  "keywords": [
+    "data",
+    "tree",
+    "node",
+    "hierarchy",
+    "child",
+    "children",
+    "path"
+  ],
+  "bugs": {
+    "url": "https://github.com/klyngbaek/datatree/issues"
+  },
+  "homepage": "https://github.com/klyngbaek/datatree"
 }
