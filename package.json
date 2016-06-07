@@ -1,6 +1,6 @@
 {
   "name": "datatree",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "function DataTree(inputJS)",
   "main": "index.js",
   "scripts": {
