@@ -1,11 +1,11 @@
 # datatree
 
 ```
-# require DataTree emodule
+# require datatree module
 var DataTree = require('datatreee');
 
 # static methods
-DataTree.concat(thisTree, thatTree, keys)
+DataTree.concat()
 
 # create DataTree instance
 var dataTree = function DataTree(inputJS)
