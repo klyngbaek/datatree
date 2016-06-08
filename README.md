@@ -5,7 +5,7 @@
 var DataTree = require('datatreee');
 
 // static variables
-DataTree.concat(thisData/*: Array<any>*/, thatData/*: Array<any>*/, keys/*: Array<string>*/)
+DataTree.concat(thisData/*: Array?<any>*/, thatData/*: Array?<any>*/, keys/*: Array<string>*/)/*: Array<any>*/
 
 // static methods
 DataTree.fromJS(inputJS/*: {data: any, children:Object}*/)/*: DataTree*/
@@ -35,6 +35,6 @@ dataTree.createChild(childName/*: string*/)
 dataTree.createChildIn(keys/*: Array<string>*/)
 dataTree.deleteChild(childName/*: string*/)
 dataTree.deleteChildIn(keys/*: Array<string>*/)
-dataTree.toList()
-dataTree.toJS()
+dataTree.toList()/*: Object>*/
+dataTree.toJS()/*: Object>*/
 ```

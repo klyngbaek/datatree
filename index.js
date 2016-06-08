@@ -36,7 +36,7 @@ DataTree.fromList = function fromList(list/*: {data: any, children:Object}*/)/*:
     }
 };
 
-DataTree.concat = function concat(thisData/*: Array<any>*/, thatData/*: Array<any>*/, keys/*: Array<string>*/) {
+DataTree.concat = function concat(thisData/*: Array?<any>*/, thatData/*: Array?<any>*/, keys/*: Array<string>*/)/*: Array<any>*/ {
     if (!thisData && !thatData) return undefined;
     else if (!thisData) return thatData.concat([]);
     else if (!thatData) return thisData.concat([]);
@@ -261,7 +261,7 @@ DataTree.prototype.deleteChildIn = function deleteChildIn(keys/*: Array<string>*
     }
 };
 
-DataTree.prototype.toList = function toList() {
+DataTree.prototype.toList = function toList()/*: Object>*/ {
     var result = {};
     function go(node, pathSoFar) {
         var data = node.getData();
@@ -278,7 +278,7 @@ DataTree.prototype.toList = function toList() {
     return result;
 };
 
-DataTree.prototype.toJS = function toJS() {
+DataTree.prototype.toJS = function toJS()/*: Object>*/ {
     function go(node) {
         var result/*: {data?:any, children: Object}*/ = {
             // data: undefined,
