@@ -1,8 +1,9 @@
 # datatree
+An easy way to store/retrieve/manipulate data associated with a path.
 
 ```javascript
 // require datatree module
-var DataTree = require('datatreee');
+var DataTree = require('datatree');
 
 // static variables
 DataTree.concat(thisData/*: Array?<any>*/, thatData/*: Array?<any>*/, keys/*: Array<string>*/)/*: Array<any>*/
