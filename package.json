@@ -1,15 +1,17 @@
 {
   "name": "datatree",
   "version": "1.0.4",
-  "description": "function DataTree(inputJS)",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*",
-    "docs": "jsdoc index.js -d docs"
+    "docs": "jsdoc index.js -d docs",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "author": "Kristian Lyngbaek <klyngbaek@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "flow-bin": "^0.26.0",
     "tape": "^4.5.1"
   },
   "dependencies": {},

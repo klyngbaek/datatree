@@ -1,23 +1,42 @@
+"use strict";
+// @flow
+
 /**
  * Copyright (c) Kristian Lyngbaek 2016
  */
 
-function DataTree(inputJS) {
+function DataTree() {
     this._data = undefined; // _data is always defined
     this._children = {}; // _children is always defined
-
-    // if optional argument is passed in, construct the data-tree from the JSON
-    if (inputJS) {
-        this._data = inputJS.data;
-        for (var childName in inputJS.children) {
-            var childJS = inputJS.children[childName];
-            this.createChild(childName, childJS);
-        }
-    }
-
 }
 
-DataTree.concat = function getData(thisData, thatData, keys) {
+DataTree.fromJS = function fromJS(inputJS/*: {data: any, children:Object}*/)/*: DataTree*/ {
+    var result = new DataTree();
+    result.setData(inputJS.data);
+    for (var childName in inputJS.children) {
+        var childJS = inputJS.children[childName];
+        var child = DataTree.fromJS(childJS);
+        result.setChild(childName, child);
+    }
+    return result;
+};
+
+DataTree.fromList = function fromList(list/*: {data: any, children:Object}*/)/*: DataTree*/ {
+    var result = new DataTree();
+
+    for (var path in list) {
+        var data = list[path];
+        var keys = path.split('/').slice(1).map(decode);
+        result.setDataIn(keys, data);
+    }
+    return result;
+
+    function decode(key/*: string*/) {
+        return decodeURIComponent(key);
+    }
+};
+
+DataTree.concat = function concat(thisData/*: Array<any>*/, thatData/*: Array<any>*/, keys/*: Array<string>*/) {
     if (!thisData && !thatData) return undefined;
     else if (!thisData) return thatData.concat([]);
     else if (!thatData) return thisData.concat([]);
@@ -28,7 +47,7 @@ DataTree.prototype.getData = function getData() {
     return this.getDataIn([]);
 };
 
-DataTree.prototype.getDataIn = function getDataIn(keys) {
+DataTree.prototype.getDataIn = function getDataIn(keys/*: Array<string>*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length===0) {
         return this._data;
@@ -47,7 +66,7 @@ DataTree.prototype.setData = function setData(data) {
     return this.setDataIn([], data);
 };
 
-DataTree.prototype.setDataIn = function setDataIn(keys, data) {
+DataTree.prototype.setDataIn = function setDataIn(keys/*: Array<string>*/, data/*: any*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length===0) {
         this._data = data;
@@ -65,7 +84,7 @@ DataTree.prototype.deleteData = function deleteData() {
     return this.deleteDataIn([]);
 };
 
-DataTree.prototype.deleteDataIn = function deleteDataIn(keys) {
+DataTree.prototype.deleteDataIn = function deleteDataIn(keys/*: Array<string>*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length === 0) delete this._data;
     var nextKey = keys[0];
@@ -76,11 +95,11 @@ DataTree.prototype.deleteDataIn = function deleteDataIn(keys) {
     }
 };
 
-DataTree.prototype.hasData = function hasData() {
+DataTree.prototype.hasData = function hasData()/*: boolean*/ {
     return this.hasDataIn([]);
 };
 
-DataTree.prototype.hasDataIn = function hasDataIn(keys) {
+DataTree.prototype.hasDataIn = function hasDataIn(keys/*: Array<string>*/)/*: boolean*/ {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length === 0) return this._data!==undefined;
     var nextKey = keys[0];
@@ -95,7 +114,7 @@ DataTree.prototype.getChildren = function getChildren() {
     return this.getChildrenIn([]);
 };
 
-DataTree.prototype.getChildrenIn = function getChildrenIn(keys) {
+DataTree.prototype.getChildrenIn = function getChildrenIn(keys/*: Array<string>*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length===0) {
         return this._children;
@@ -110,11 +129,11 @@ DataTree.prototype.getChildrenIn = function getChildrenIn(keys) {
     }
 };
 
-DataTree.prototype.hasChildren = function hasChildren() {
+DataTree.prototype.hasChildren = function hasChildren()/*: boolean*/ {
     return this.hasChildrenIn([]);
 };
 
-DataTree.prototype.hasChildrenIn = function hasChildrenIn(keys) {
+DataTree.prototype.hasChildrenIn = function hasChildrenIn(keys/*: Array<string>*/)/*: boolean*/ {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length === 0) return Object.keys(this._children).length > 0;
     var nextKey = keys[0];
@@ -125,11 +144,11 @@ DataTree.prototype.hasChildrenIn = function hasChildrenIn(keys) {
     }
 };
 
-DataTree.prototype.merge = function merge(thatDataTree, mergeFunc) {
+DataTree.prototype.merge = function merge(thatDataTree/*: DataTree*/, mergeFunc/*: function*/) {
     this.mergeIn([], thatDataTree, mergeFunc);
 };
 
-DataTree.prototype.mergeIn = function mergeIn(keys, thatDataTree, mergeFunc) {
+DataTree.prototype.mergeIn = function mergeIn(keys/*: Array<string>*/, thatDataTree/*: DataTree*/, mergeFunc/*: function*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if ( !(thatDataTree instanceof DataTree)) throw new Error('thatDataTree argument must be an instance of DataTree');
     if (!this.hasChildIn(keys)) {
@@ -139,7 +158,7 @@ DataTree.prototype.mergeIn = function mergeIn(keys, thatDataTree, mergeFunc) {
     var thisDataTree = this.getChildIn(keys);
     merge(thisDataTree, thatDataTree, keys);
 
-    function merge(self, that, keys) {
+    function merge(self, that, keys/*: Array<string>*/) {
         var dataResult = mergeFunc(self.getData(), that.getData(), keys);
         self.setData(dataResult);
 
@@ -155,12 +174,12 @@ DataTree.prototype.mergeIn = function mergeIn(keys, thatDataTree, mergeFunc) {
     }
 };
 
-DataTree.prototype.hasChild = function hasChild(childName) {
+DataTree.prototype.hasChild = function hasChild(childName/*: string*/)/*: boolean*/ {
     if ( typeof childName !== 'string' ) throw new Error('childName argument must be a string');
     return this.hasChildIn([childName]);
 };
 
-DataTree.prototype.hasChildIn = function hasChildIn(keys) {
+DataTree.prototype.hasChildIn = function hasChildIn(keys/*: Array<string>*/)/*: boolean*/ {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     var nextKey = keys[0];
     if (keys.length === 1) return nextKey in this._children;
@@ -171,30 +190,31 @@ DataTree.prototype.hasChildIn = function hasChildIn(keys) {
     }
 };
 
-DataTree.prototype.getChild = function getChild(childName) {
+DataTree.prototype.getChild = function getChild(childName/*: string*/)/*: ?DataTree*/ {
     if ( typeof childName !== 'string' ) throw new Error('childName argument must be a string');
     return this.getChildIn([childName]);
 };
 
-DataTree.prototype.getChildIn = function getChildIn(keys) {
+DataTree.prototype.getChildIn = function getChildIn(keys/*: Array<string>*/)/*: ?DataTree*/ {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
     if (keys.length === 0) return this;
     var nextKey = keys[0];
     if (nextKey in this._children) {
         return this._children[nextKey].getChildIn(keys.slice(1));
     } else {
-        return;
+        return undefined;
     }
 };
 
-DataTree.prototype.setChild = function setChild(childName, childDataTree) {
+DataTree.prototype.setChild = function setChild(childName/*: string*/, childDataTree/*: DataTree*/) {
     if ( typeof childName !== 'string' ) throw new Error('childName argument must be a string');
     if ( !(childDataTree instanceof DataTree)) throw new Error('childDataTree argument must be an instance of DataTree');
     this.setChildIn([childName], childDataTree);
 };
 
-DataTree.prototype.setChildIn = function setChildIn(keys, childDataTree) {
+DataTree.prototype.setChildIn = function setChildIn(keys/*: Array<string>*/, childDataTree/*: DataTree*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
+    if (keys.length<1) throw new Error('keys array must length of at least 1');
     if ( !(childDataTree instanceof DataTree)) throw new Error('childDataTree argument must be an instance of DataTree');
 
     var key = keys[0];
@@ -205,27 +225,33 @@ DataTree.prototype.setChildIn = function setChildIn(keys, childDataTree) {
             this._children[key] = new DataTree();
         }
         var child = this.getChild(key);
-        child.setChildIn(keys.slice(1, keys.length), childDataTree);
+        if (child) {
+            child.setChildIn(keys.slice(1, keys.length), childDataTree);
+        } else {
+            throw new Error('Something went really wrong');
+        }
     }
 };
 
-DataTree.prototype.createChild = function createChild(childName, inputJS) {
+DataTree.prototype.createChild = function createChild(childName/*: string*/) {
     if ( typeof childName !== 'string' ) throw new Error('childName argument must be a string');
-    this.createChildIn([childName], inputJS);
+    this.createChildIn([childName]);
 };
 
-DataTree.prototype.createChildIn = function createChildIn(keys, inputJS) {
+DataTree.prototype.createChildIn = function createChildIn(keys/*: Array<string>*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
-    this.setChildIn(keys, new DataTree(inputJS));
+    if (keys.length<1) throw new Error('keys array must length of at least 1');
+    this.setChildIn(keys, new DataTree());
 };
 
-DataTree.prototype.deleteChild = function deleteChild(childName) {
+DataTree.prototype.deleteChild = function deleteChild(childName/*: string*/) {
     if ( typeof childName !== 'string' ) throw new Error('childName argument must be a string');
     this.deleteChildIn([childName]);
 };
 
-DataTree.prototype.deleteChildIn = function deleteChildIn(keys) {
+DataTree.prototype.deleteChildIn = function deleteChildIn(keys/*: Array<string>*/) {
     if (!Array.isArray(keys)) throw new Error('keys argument must be an array');
+    if (keys.length<1) throw new Error('keys array must length of at least 1');
     if (keys.length === 1) delete this._children[keys[0]];
     var nextKey = keys[0];
     if (nextKey in this._children) {
@@ -235,7 +261,7 @@ DataTree.prototype.deleteChildIn = function deleteChildIn(keys) {
     }
 };
 
-DataTree.prototype.list = function list() {
+DataTree.prototype.toList = function toList() {
     var result = {};
     function go(node, pathSoFar) {
         var data = node.getData();
@@ -254,7 +280,8 @@ DataTree.prototype.list = function list() {
 
 DataTree.prototype.toJS = function toJS() {
     function go(node) {
-        var result = {
+        var result/*: {data?:any, children: Object}*/ = {
+            // data: undefined,
             children: {}
         };
 

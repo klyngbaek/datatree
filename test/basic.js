@@ -9,7 +9,7 @@ var test = require('tape');
 var DataTree = require('../index.js');
 
 test('Basic Tests', function (t) {
-    t.plan(21);
+    t.plan(23);
 
     // setData getData
     var dataTree1 = new DataTree();
@@ -172,8 +172,10 @@ test('Basic Tests', function (t) {
     t.deepEquals(dataTree.hasChildIn(['fee', 'fie', 'foe']), true, 'Test hasChildIn');
     t.deepEquals(dataTree.getChildIn(['fee', 'fie', 'foe']).toJS(), childIn, 'Test getChildIn');
 
-    var blankTree = new DataTree(test);
-    t.deepEquals(blankTree.toJS(), test, 'Test toJS');
+    var blankTree1 = DataTree.fromJS(test);
+    t.deepEquals(blankTree1.toJS(), test, 'Test fromJS');
+
+    t.deepEquals(DataTree.fromList(DataTree.fromJS(test).toList()).toJS(), test, 'Test fromList fromJS toList toJS');
 
     // create a second data tree
     var dataTree3 = new DataTree();
@@ -246,13 +248,15 @@ test('Basic Tests', function (t) {
     t.deepEquals(dataTree.toJS(), test3, 'Test mergeIn');
 
 
-    // test the list functionality
+    // test the toList functionality
     var test9 = {
         '/fee/fie/foe': [ 'Data 1', 'Data 2', 'Data 3' ],
         '/fee/other-path': [ 'Data A', 'Data B' ],
         '/fee/other-path/one/two': [ 'Data C', 'Data D' ]
     };
-    t.deepEquals(dataTree.list(), test9, 'Test list');
+    t.deepEquals(dataTree.toList(), test9, 'Test toList');
+
+    t.deepEquals(DataTree.fromList(test9).toList(), test9, 'Test fromList');
 
 
     // read from a path within the first data tree

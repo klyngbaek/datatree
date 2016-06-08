@@ -2,7 +2,6 @@
  * Copyright (c) Kristian Lyngbaek 2016
  */
 
-// npm modules
 var test = require('tape');
 
 // data-tree modules
