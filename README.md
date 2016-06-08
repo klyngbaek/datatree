@@ -13,6 +13,9 @@ DataTree.fromJS(inputJS/*: {data: any, children:Object}*/)/*: DataTree*/
 DataTree.fromList(list/*: {data: any, children:Object}*/)/*: DataTree*/
 
 // create DataTree instance
+var dataTree = new DataTree();
+
+// prototype methods
 dataTree.getDataIn(keys/*: Array<string>*/)
 dataTree.setData(data)
 dataTree.setDataIn(keys/*: Array<string>*/, data/*: any*/)
