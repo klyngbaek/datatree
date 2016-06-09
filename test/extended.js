@@ -1,3 +1,6 @@
+"use strict";
+// @flow
+
 /**
  * Copyright (c) Kristian Lyngbaek 2016
  */
