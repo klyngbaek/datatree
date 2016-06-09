@@ -44,5 +44,5 @@ dataTree.createChildIn(keys/*: Array<string>*/)/*: void*/
 dataTree.deleteChild(childName/*: string*/)/*: void*/
 dataTree.deleteChildIn(keys/*: Array<string>*/)/*: void*/
 dataTree.toList()/*: List*/
-dataTree.toJS()/*: JS>*/
+dataTree.toJS()/*: JS*/
 ```
