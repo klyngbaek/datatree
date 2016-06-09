@@ -22,7 +22,7 @@ var dataTree = new DataTree();
 // prototype methods
 dataTree.getDataIn(keys/*: Array<string>*/)
 dataTree.setData(data)/*: void*/
-dataTree.setDataIn(keys/*: Array<string>*/, data/*: any*/)
+dataTree.setDataIn(keys/*: Array<string>*/, data/*: any*/)/*: void*/
 dataTree.deleteData()/*: void*/
 dataTree.deleteDataIn(keys/*: Array<string>*/)/*: void*/
 dataTree.hasData()/*: boolean*/
@@ -43,6 +43,6 @@ dataTree.createChild(childName/*: string*/)/*: void*/
 dataTree.createChildIn(keys/*: Array<string>*/)/*: void*/
 dataTree.deleteChild(childName/*: string*/)/*: void*/
 dataTree.deleteChildIn(keys/*: Array<string>*/)/*: void*/
-dataTree.toList()/*: List>*/
+dataTree.toList()/*: List*/
 dataTree.toJS()/*: JS>*/
 ```
